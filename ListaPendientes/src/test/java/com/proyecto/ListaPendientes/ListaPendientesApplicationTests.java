@@ -1,0 +1,13 @@
+package com.proyecto.ListaPendientes;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ListaPendientesApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
