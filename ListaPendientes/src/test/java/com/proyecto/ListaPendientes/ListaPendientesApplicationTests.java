@@ -1,4 +1,4 @@
-package com.proyecto.ListaPendientes;
+package com.proyecto.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
