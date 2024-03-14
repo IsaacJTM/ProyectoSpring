@@ -1,4 +1,4 @@
 package com.proyecto.listaPendientes.domain.port.out;
 
-public class TareaServiceOut {
+public interface TareaServiceOut {
 }
