@@ -1,6 +1,11 @@
 CREATE TABLE Rol(
 	id_rol SERIAL PRIMARY KEY,
-	nombre_Rol VARCHAR(255) NOT NULL
+	nombre_Rol VARCHAR(255) NOT NULL,
+	user_create VARCHAR (255),
+	user_date_create TIMESTAMP,
+	user_update VARCHAR(255),
+	user_date_update TIMESTAMP,
+	user_delete VARCHAR(255)
 );
 
 CREATE TABLE Usuario (
