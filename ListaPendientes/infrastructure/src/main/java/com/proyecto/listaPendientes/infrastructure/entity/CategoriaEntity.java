@@ -1,0 +1,46 @@
+package com.proyecto.listaPendientes.infrastructure.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+import java.sql.Timestamp;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "categoria")
+@RequiredArgsConstructor
+public class CategoriaEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categoria")
+    private Long idCategoria;
+
+    @Column(name = "nombre_categoria")
+    private String nombreCategoria;
+
+    @Column(name = "descripcion_categoria")
+    private String descripcionCategoria;
+
+    @Column(name = "estado_parestesco", nullable = false)
+    private Integer estadoParestesco;
+
+    @Column(name = "usua_create", length = 45)
+    private String userCreate;
+
+    @Column(name = "user_date_create")
+    private Timestamp userDateCreate;
+
+    @Column(name = "user_update", length = 45)
+    private String userUpdate;
+
+    @Column(name = "user_date_update")
+    private Timestamp userDateUpdate;
+
+    @Column(name = "user_delete", length = 45)
+    private String userDelete;
+
+}
