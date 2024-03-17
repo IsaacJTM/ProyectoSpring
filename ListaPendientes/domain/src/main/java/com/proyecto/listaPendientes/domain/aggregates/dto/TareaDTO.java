@@ -9,4 +9,5 @@ public class TareaDTO {
     private long idtarea;
     private String tarea;
     private String descripción;
+    private String Comentario;
 }
