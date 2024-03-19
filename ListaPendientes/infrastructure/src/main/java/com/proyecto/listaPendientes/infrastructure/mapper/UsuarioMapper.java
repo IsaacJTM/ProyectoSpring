@@ -1,6 +1,5 @@
 package com.proyecto.listaPendientes.infrastructure.mapper;
 
-import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
 import com.proyecto.listaPendientes.infrastructure.entity.UsuarioEntity;
 import org.modelmapper.ModelMapper;
 
