@@ -9,10 +9,10 @@ import java.util.Optional;
 public interface TareaServiceOut {
 
 
-    TareaDTO creaTareaOut(RequestTarea requestTarea);
+    TareaDTO crearTareaOut(RequestTarea requestTarea);
     Optional<TareaDTO> obtenerTareaOut(Long id);
     List<TareaDTO> obtenerTodasOut();
-    TareaDTO actualzarOut(Long id, RequestTarea requestTarea);
-    TareaDTO deleteOut(Long id);
+    TareaDTO actualzarTareaOut(Long id, RequestTarea requestTarea);
+    TareaDTO deleteTareaOut(Long id);
 
 }

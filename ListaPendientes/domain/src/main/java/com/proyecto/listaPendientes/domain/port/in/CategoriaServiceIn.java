@@ -2,15 +2,16 @@ package com.proyecto.listaPendientes.domain.port.in;
 
 import com.proyecto.listaPendientes.domain.aggregates.dto.CategoriaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
+import com.proyecto.listaPendientes.domain.aggregates.request.RequestCategoria;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CategoriaServiceIn {
-    TareaDTO creaTareaIn(RequestTarea requestTarea);
-    Optional<TareaDTO> obtenerTareaIn(Long id);
-    List<TareaDTO> obtenerTodasIn();
-    TareaDTO actualzarIn(Long id, RequestTarea requestTarea);
-    TareaDTO deleteIn(Long id);
+    CategoriaDTO crearCategoriaIn(RequestCategoria requestCategoria);
+    Optional<CategoriaDTO> obtenerCategoriaIn(Long id);
+    List<CategoriaDTO> obtenerCategoriaAllIn();
+    CategoriaDTO actualzarCategoriaIn(Long id, RequestCategoria requestCategoria);
+    CategoriaDTO deleteCategoriaIn(Long id);
 }

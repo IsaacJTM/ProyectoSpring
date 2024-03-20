@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface TareaServiceIn {
 
-    TareaDTO creaTareaIn(RequestTarea requestTarea);
+    TareaDTO crearTareaIn(RequestTarea requestTarea);
     Optional<TareaDTO> obtenerTareaIn(Long id);
     List<TareaDTO> obtenerTodasIn();
-    TareaDTO actualzarIn(Long id, RequestTarea requestTarea);
-    TareaDTO deleteIn(Long id);
+    TareaDTO actualzarTareaIn(Long id, RequestTarea requestTarea);
+    TareaDTO deleteTareaIn(Long id);
 
 
 }

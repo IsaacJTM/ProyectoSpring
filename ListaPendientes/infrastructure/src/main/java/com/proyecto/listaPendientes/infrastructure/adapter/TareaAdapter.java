@@ -13,7 +13,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TareaAdapter implements TareaServiceOut {
     @Override
-    public TareaDTO creaTareaOut(RequestTarea requestTarea) {
+    public TareaDTO crearTareaOut(RequestTarea requestTarea) {
         return null;
     }
 
@@ -28,12 +28,14 @@ public class TareaAdapter implements TareaServiceOut {
     }
 
     @Override
-    public TareaDTO actualzarOut(Long id, RequestTarea requestTarea) {
+    public TareaDTO actualzarTareaOut(Long id, RequestTarea requestTarea) {
         return null;
     }
 
     @Override
-    public TareaDTO deleteOut(Long id) {
+    public TareaDTO deleteTareaOut(Long id) {
         return null;
     }
+
+
 }

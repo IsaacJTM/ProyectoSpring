@@ -16,9 +16,9 @@ public class TareaServiceImpl implements TareaServiceIn {
 
     private final TareaServiceOut tareaServiceOut;
     @Override
-    public TareaDTO creaTareaIn(RequestTarea requestTarea) {
+    public TareaDTO crearTareaIn(RequestTarea requestTarea) {
 
-        return tareaServiceOut.creaTareaOut(requestTarea);
+        return tareaServiceOut.crearTareaOut(requestTarea);
     }
 
     @Override
@@ -33,12 +33,14 @@ public class TareaServiceImpl implements TareaServiceIn {
     }
 
     @Override
-    public TareaDTO actualzarIn(Long id, RequestTarea requestTarea) {
-        return tareaServiceOut.actualzarOut(id, requestTarea);
+    public TareaDTO actualzarTareaIn(Long id, RequestTarea requestTarea) {
+        return tareaServiceOut.actualzarTareaOut(id, requestTarea);
     }
 
     @Override
-    public TareaDTO deleteIn(Long id) {
-        return tareaServiceOut.deleteOut(id);
+    public TareaDTO deleteTareaIn(Long id) {
+        return tareaServiceOut.deleteTareaOut(id);
     }
+
+
 }
