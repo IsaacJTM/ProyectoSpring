@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @Setter
 @Entity
 @Table(name = "tarea")
-@RequiredArgsConstructor
 public class TareaEntity {
 
     @Id
@@ -48,6 +47,9 @@ public class TareaEntity {
 
     @Column(name = "user_delete", length = 45)
     private String userDelete;
+
+    @Column(name = "user_date_delet")
+    private Timestamp userDateDelet;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_comentario_fk", nullable = false)

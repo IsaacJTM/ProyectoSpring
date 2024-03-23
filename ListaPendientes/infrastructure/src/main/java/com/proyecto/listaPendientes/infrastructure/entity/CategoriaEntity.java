@@ -43,4 +43,7 @@ public class CategoriaEntity {
     @Column(name = "user_delete", length = 45)
     private String userDelete;
 
+    @Column(name = "user_date_delet")
+    private Timestamp userDateDelet;
+
 }

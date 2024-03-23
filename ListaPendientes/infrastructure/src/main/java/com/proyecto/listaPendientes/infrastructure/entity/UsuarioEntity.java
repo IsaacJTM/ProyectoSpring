@@ -17,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "usuario")
 @RequiredArgsConstructor
+@NamedQuery(name = "UsuarioEntity.findByIdUsuario", query = "select a from UsuarioEntity a where a.idUsuario=:idUsuario")
 public class UsuarioEntity implements UserDetails {
 
     @Id
@@ -29,7 +30,6 @@ public class UsuarioEntity implements UserDetails {
 
     @Column(name = "apellidos_usuario", nullable = false, length = 45)
     private String apellidosUsuario;
-
 
     @Column(name = "email", nullable = false, length = 65)
     private String email;
@@ -64,6 +64,9 @@ public class UsuarioEntity implements UserDetails {
 
     @Column(name = "user_delete", length = 45)
     private String userDelete;
+
+    @Column(name = "user_date_delet")
+    private Timestamp userDateDelet;
 
     //USER DETAIL
     @Override
