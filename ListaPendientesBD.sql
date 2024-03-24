@@ -15,7 +15,7 @@ CREATE TABLE Usuario (
 	email_usuario VARCHAR (255) UNIQUE NOT NULL,
 	password VARCHAR (255) NOT NULL,
 	telefono VARCHAR (9),
-	edad INT NOT NULL, 
+	edad INT, 
 	estado_Usuario INT NOT NULL,
 	id_rol_fk INT, 
 	user_create VARCHAR (255),

@@ -55,6 +55,7 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
         usuario.setEstadoUsuario(Constants.STATUS_ACTIVE);
         usuario.setUserCreate(Constants.AUDIT_ADMIN);
         usuario.setUserDateCreate(getTimestamp());
+        usuarioRepository.save(usuario);
         return  usuarioMapper.mapToDTO(usuario);
     }
 
@@ -76,4 +77,6 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
         Timestamp timestamp = new Timestamp(currentTime);
         return timestamp;
     }
+
+
 }

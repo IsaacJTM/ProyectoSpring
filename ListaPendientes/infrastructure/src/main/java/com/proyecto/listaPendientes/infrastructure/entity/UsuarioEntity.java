@@ -31,7 +31,7 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "apellidos_usuario", nullable = false, length = 45)
     private String apellidosUsuario;
 
-    @Column(name = "email", nullable = false, length = 65)
+    @Column(name = "email_usuario", nullable = false, length = 65)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -50,7 +50,7 @@ public class UsuarioEntity implements UserDetails {
     @JoinColumn(name = "id_rol_fk", nullable = false)
     private RolEntity rol;
 
-    @Column(name = "usua_create", length = 45)
+    @Column(name = "user_create", length = 45)
     private String userCreate;
 
     @Column(name = "user_date_create")
@@ -71,7 +71,8 @@ public class UsuarioEntity implements UserDetails {
     //USER DETAIL
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rol.getNombreRol()));
+       return List.of(new SimpleGrantedAuthority(rol.getNombreRol()));
+
     }
 
     @Override

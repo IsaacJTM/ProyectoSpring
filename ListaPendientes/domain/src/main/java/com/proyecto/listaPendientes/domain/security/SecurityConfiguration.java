@@ -30,7 +30,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/autenticacion/**")
                         .permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("api/v1/user/**").hasAnyAuthority("USER")
+                        .requestMatchers("/api/v1/Users/responsable/**").hasAnyAuthority("RESPONSABLE")
+                        .requestMatchers("/api/v1/Users/delegante/**").hasAnyAuthority("DELEGANTE")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

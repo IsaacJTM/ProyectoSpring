@@ -20,7 +20,7 @@ public class JWTServiceAdapter implements JWTServiceOut {
     public String generarTokenOut(UserDetails userDetails) {
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 5*3600))
+                .setExpiration(new Date(System.currentTimeMillis() + 5*360000))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -28,7 +28,8 @@ public class JWTServiceAdapter implements JWTServiceOut {
     @Override
     public boolean validarTokenOut(String token, UserDetails userDetails) {
         final String username = extractUserNameOut(token);
-        return (username.equals(userDetails.getUsername()) && isTokenExpired(token));
+        boolean expirar = isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()) && expirar);
     }
 
     @Override
