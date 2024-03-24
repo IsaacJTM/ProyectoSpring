@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface TareaServiceOut {
 
-
     TareaDTO crearTareaOut(RequestTarea requestTarea);
     Optional<TareaDTO> obtenerTareaOut(Long id);
     List<TareaDTO> obtenerTodasOut();

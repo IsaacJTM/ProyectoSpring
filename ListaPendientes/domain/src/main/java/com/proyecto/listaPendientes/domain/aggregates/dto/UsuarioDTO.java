@@ -17,7 +17,7 @@ public class UsuarioDTO {
     private String telefono;
     private String edad;
     private Integer estadoUsuario;
-    private List rol;
+    private RolDTO rol;
     private String userCreate;
     private Timestamp userDateCreate;
     private String userUpdate;
