@@ -1,6 +1,7 @@
 package com.proyecto.listaPendientes.infrastructure.adapter;
 
 import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
+import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
 import com.proyecto.listaPendientes.domain.port.out.UsuarioServiceOut;
 import com.proyecto.listaPendientes.infrastructure.entity.UsuarioEntity;
 import com.proyecto.listaPendientes.infrastructure.mapper.UsuarioMapper;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,23 +24,35 @@ public class UsuarioAdapter implements UsuarioServiceOut {
     private final UsuarioMapper usuarioMapper;
 
     @Override
-    public Optional<UsuarioDTO> getUsuarioOut(Long id) {
+    public ResponseBase getUsuarioOut(Long id) {
         Optional<UsuarioEntity> usuario = usuarioRepository.findById(id);
         if(usuario.isEmpty()){
-            return  null;
+            return  new ResponseBase(404,"Dato no encontrado", false,Optional.empty());
         }
         UsuarioDTO dto = usuarioMapper.mapToDTO(usuario.get());
-        return Optional.of(dto);
+        return new ResponseBase(201,"Dato encontrado",true,
+                Optional.of(dto));
     }
 
     @Override
-    public UsuarioDTO updateUsuarioOut(Long id, UsuarioDTO usuario) {
+    public ResponseBase updateUsuarioOut(Long id, UsuarioDTO usuario) {
         return null;
     }
 
     @Override
-    public UsuarioDTO deleteUsuarioOut(Long id) {
+    public ResponseBase deleteUsuarioOut(Long id) {
         return null;
+    }
+
+    @Override
+    public ResponseBase obtenerTodasOut() {
+        List<UsuarioDTO> listUsers = new ArrayList<>();
+        List<UsuarioEntity> usuariosBD = usuarioRepository.findAll();
+        for(UsuarioEntity  usuarios : usuariosBD){
+            UsuarioDTO usuarioDTO = usuarioMapper.mapToDTO(usuarios);
+            listUsers.add(usuarioDTO);
+        }
+        return new ResponseBase(200,"Listado",true, Optional.of(listUsers));
     }
 
     @Override

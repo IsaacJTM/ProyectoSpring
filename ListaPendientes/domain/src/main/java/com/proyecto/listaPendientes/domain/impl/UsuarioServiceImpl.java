@@ -1,6 +1,7 @@
 package com.proyecto.listaPendientes.domain.impl;
 
 import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
+import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
 import com.proyecto.listaPendientes.domain.port.in.UsuarioServiceIn;
 import com.proyecto.listaPendientes.domain.port.out.UsuarioServiceOut;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +16,23 @@ public class UsuarioServiceImpl implements UsuarioServiceIn {
     private final UsuarioServiceOut usuarioServiceOut;
 
     @Override
-    public Optional<UsuarioDTO> getUsuarioIn(Long id) {
+    public ResponseBase getUsuarioIn(Long id) {
         return usuarioServiceOut.getUsuarioOut(id);
     }
 
     @Override
-    public UsuarioDTO updateUsuarioIn(Long id, UsuarioDTO usuario) {
+    public ResponseBase updateUsuarioIn(Long id, UsuarioDTO usuario) {
         return usuarioServiceOut.updateUsuarioOut(id, usuario);
     }
 
     @Override
-    public UsuarioDTO deleteUsuarioIn(Long id) {
+    public ResponseBase deleteUsuarioIn(Long id) {
         return usuarioServiceOut.deleteUsuarioOut(id);
+    }
+
+    @Override
+    public ResponseBase obtenerTodasIn() {
+        return usuarioServiceOut.obtenerTodasOut();
     }
 
     @Override

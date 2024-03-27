@@ -2,11 +2,11 @@ package com.proyecto.listaPendientes.infrastructure.adapter;
 
 import com.proyecto.listaPendientes.domain.port.out.JWTServiceOut;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +37,7 @@ public class JWTServiceAdapter implements JWTServiceOut {
         return extractClaims(token, Claims::getSubject);
     }
 
+
     //Métodos de apoyo
     //Generar token
     private Key getSignKey(){
@@ -49,8 +50,15 @@ public class JWTServiceAdapter implements JWTServiceOut {
         return claimsFunction.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
+    private Claims extractAllClaims(String token) throws ExpiredJwtException{
+       /* try{
+            Key llave = getSignKey();
+            return Jwts.parserBuilder().setSigningKey(llave).build().parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(null, null, "El token ha expirado");
+        }*/
+        Key llave = getSignKey();
+        return Jwts.parserBuilder().setSigningKey(llave).build().parseClaimsJws(token).getBody();
     }
     private boolean isTokenExpired(String token){
         return (new Date().before(extractClaims(token, Claims::getExpiration)));
