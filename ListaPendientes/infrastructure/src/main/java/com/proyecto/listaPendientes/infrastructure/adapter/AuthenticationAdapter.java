@@ -5,13 +5,17 @@ import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.SignInRequest;
 import com.proyecto.listaPendientes.domain.aggregates.request.SignUpRequest;
 import com.proyecto.listaPendientes.domain.aggregates.response.AuthenticationResponse;
+import com.proyecto.listaPendientes.domain.aggregates.response.ResponseReniec;
 import com.proyecto.listaPendientes.domain.port.out.AuthenticationServiceOut;
 import com.proyecto.listaPendientes.domain.port.out.JWTServiceOut;
+import com.proyecto.listaPendientes.infrastructure.entity.RolEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.UsuarioEntity;
 import com.proyecto.listaPendientes.infrastructure.mapper.UsuarioMapper;
 import com.proyecto.listaPendientes.infrastructure.repository.RolRepository;
 import com.proyecto.listaPendientes.infrastructure.repository.UsuarioRepository;
+import com.proyecto.listaPendientes.infrastructure.rest.client.ClienteReniec;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,35 +32,22 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
     private final JWTServiceOut jwtServiceOut;
     private final RolRepository rolRepository;
     private final UsuarioMapper usuarioMapper;
+    private final ClienteReniec reniec;
 
+    @Value("${token.api}")
+    private String tokenApi;
     @Override
     public UsuarioDTO signUpUser(SignUpRequest signUpRequest) {
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setNombreUsuario(signUpRequest.getNombre());
-        usuario.setApellidosUsuario(signUpRequest.getApellido());
-        usuario.setEmail(signUpRequest.getEmail());
-        usuario.setRol(rolRepository.findByNombreRol(signUpRequest.getRole()));
-        usuario.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
-        usuario.setEstadoUsuario(Constants.STATUS_ACTIVE);
-        usuario.setUserCreate(Constants.AUDIT_ADMIN);
-        usuario.setUserDateCreate(getTimestamp());
-        usuarioRepository.save(usuario);
-        return  usuarioMapper.mapToDTO(usuario);
+        ResponseReniec responseReniec= getExecutionReniec(signUpRequest.getNumeroDocumento());
+        usuarioRepository.save(getEntity(responseReniec,signUpRequest));
+        return  usuarioMapper.mapToDTO(getEntity(responseReniec,signUpRequest));
     }
 
     @Override
     public UsuarioDTO signUpAdmin(SignUpRequest signUpRequest) {
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setNombreUsuario(signUpRequest.getNombre());
-        usuario.setApellidosUsuario(signUpRequest.getApellido());
-        usuario.setEmail(signUpRequest.getEmail());
-        usuario.setRol(rolRepository.findByNombreRol("ADMIN"));
-        usuario.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
-        usuario.setEstadoUsuario(Constants.STATUS_ACTIVE);
-        usuario.setUserCreate(Constants.AUDIT_ADMIN);
-        usuario.setUserDateCreate(getTimestamp());
-        usuarioRepository.save(usuario);
-        return  usuarioMapper.mapToDTO(usuario);
+        ResponseReniec responseReniec= getExecutionReniec(signUpRequest.getNumeroDocumento());
+        usuarioRepository.save(getEntity(responseReniec,signUpRequest));
+        return  usuarioMapper.mapToDTO(getEntity(responseReniec,signUpRequest));
     }
 
     @Override
@@ -76,6 +67,31 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
         long currentTime = System.currentTimeMillis();
         Timestamp timestamp = new Timestamp(currentTime);
         return timestamp;
+    }
+
+    public ResponseReniec getExecutionReniec(String numero){
+        String authorization = "Bearer "+tokenApi;
+        ResponseReniec responseReniec = reniec.getInfoReniec(numero,authorization);
+        return  responseReniec;
+    }
+    private UsuarioEntity getEntity(ResponseReniec reniec, SignUpRequest signUpRequest){
+        RolEntity rol;
+        if(signUpRequest.getRole().isEmpty()){
+            rol =  rolRepository.findByNombreRol("ADMIN");
+        }else {
+            rol = rolRepository.findByNombreRol(signUpRequest.getRole());
+        }
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setNumeroDocumento(reniec.getNumeroDocumento());
+        entity.setNombreUsuario(reniec.getNombres());
+        entity.setApellidosUsuario(reniec.getApellidoPaterno()+" "+reniec.getApellidoMaterno());
+        entity.setPassword(signUpRequest.getPassword());
+        entity.setEmail(signUpRequest.getEmail());
+        entity.setRol(rol);
+        entity.setEstadoUsuario(Constants.STATUS_ACTIVE);
+        entity.setUserCreate(Constants.AUDIT_ADMIN);
+        entity.setUserDateCreate(getTimestamp());
+        return entity;
     }
 
 
