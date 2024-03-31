@@ -1,45 +1,64 @@
 package com.proyecto.listaPendientes.application.controller;
 
 import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
-import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
+import com.proyecto.listaPendientes.domain.aggregates.request.RequestUsuario;
 import com.proyecto.listaPendientes.domain.port.in.UsuarioServiceIn;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
+
 
 @RestController
 @RequestMapping ("api/v1")
 @RequiredArgsConstructor
+
+
 public class UsuarioController {
     private final UsuarioServiceIn usuarioServiceIn;
+
     @GetMapping("Users/responsable/ObtenerUser/{id}")
-    public ResponseBase getUsuarioResponsable(@PathVariable Long id){
-        return usuarioServiceIn.getUsuarioIn(id);
-    }
-    @GetMapping("Users/delegante/ObtenerUser/{id}")
-    public ResponseBase getUsuarioDelegate(@PathVariable Long id){
-        return usuarioServiceIn.getUsuarioIn(id);
+    public ResponseEntity<UsuarioDTO> getUsuarioResponsable(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(usuarioServiceIn.getUsuarioIn(id).get());
     }
 
-    @GetMapping("Users/responsable/ActualizarUser/{id}")
-    public ResponseBase updateUsuarioRespnsable(@PathVariable Long id,@RequestBody UsuarioDTO usuario){
-        return usuarioServiceIn.updateUsuarioIn(id,usuario);
+
+    @GetMapping("Users/delegante/ObtenerUser/{id}")
+    public ResponseEntity<UsuarioDTO> getUsuarioDelegate(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(usuarioServiceIn.getUsuarioIn(id).get());
     }
-    @GetMapping("Users/delegante/ActualizarUser/{id}")
-    public ResponseBase updateUsuarioDelegante(@PathVariable Long id,@RequestBody UsuarioDTO usuario){
-        return usuarioServiceIn.updateUsuarioIn(id,usuario);
+
+    @PutMapping("Users/responsable/ActualizarUser/{id}")
+    public ResponseEntity<UsuarioDTO> updateUsuarioRespnsable(@PathVariable Long id, @RequestBody RequestUsuario requestUsuario) {
+        return ResponseEntity.ok(usuarioServiceIn.updateUsuarioIn(id, requestUsuario));
     }
-    @GetMapping("admin/EliminarUsuario/{id}")
-    public ResponseBase deleteUsuario(@PathVariable Long id){
-        return usuarioServiceIn.deleteUsuarioIn(id);
+
+    @PutMapping("Users/delegante/ActualizarUser/{id}")
+    public ResponseEntity<UsuarioDTO> updateUsuarioDelegante(@PathVariable Long id, @RequestBody RequestUsuario requestUsuario) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioServiceIn.updateUsuarioIn(id, requestUsuario));
+
+    }
+    @DeleteMapping("admin/EliminarUsuario/{id}")
+    public ResponseEntity<UsuarioDTO> deleteUsuario(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioServiceIn.deleteUsuarioIn(id));
+
     }
 
     @GetMapping("admin/ObtenerUser")
-    public ResponseBase listaUsuarios(){
-        return usuarioServiceIn.obtenerTodasIn();
+    public ResponseEntity<List<UsuarioDTO>> listaUsuarios() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioServiceIn.obtenerTodasIn());
     }
-
 
 }

@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "categoria")
 @RequiredArgsConstructor
+@NamedQuery(name = "CategoriaEntity.findByIdCategoria", query = "select a from CategoriaEntity a where a.idCategoria=:idCategoria")
 public class CategoriaEntity {
 
     @Id
@@ -28,7 +29,7 @@ public class CategoriaEntity {
     @Column(name = "estado_parestesco", nullable = false)
     private Integer estadoParestesco;
 
-    @Column(name = "usua_create", length = 45)
+    @Column(name = "user_create", length = 45)
     private String userCreate;
 
     @Column(name = "user_date_create")

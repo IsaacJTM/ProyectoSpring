@@ -3,7 +3,6 @@ package com.proyecto.listaPendientes.application.controller;
 import com.proyecto.listaPendientes.domain.aggregates.dto.CategoriaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestCategoria;
 import com.proyecto.listaPendientes.domain.port.in.CategoriaServiceIn;
-import feign.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +30,12 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaServiceIn.obtenerCategoriaAllIn());
     }
 
-    @GetMapping("Actualizar/{id}")
+    @PutMapping("Actualizar/{id}")
     public  ResponseEntity<CategoriaDTO> actualzarCategoria(@PathVariable Long id,@RequestBody RequestCategoria requestCategoria){
         return ResponseEntity.ok(categoriaServiceIn.actualzarCategoriaIn(id,requestCategoria));
     }
 
-    @GetMapping("Eliminar/{id}")
+    @DeleteMapping("Eliminar/{id}")
     public ResponseEntity<CategoriaDTO> deleteCategoria(@PathVariable Long id){
         return ResponseEntity.ok(categoriaServiceIn.deleteCategoriaIn(id));
     }

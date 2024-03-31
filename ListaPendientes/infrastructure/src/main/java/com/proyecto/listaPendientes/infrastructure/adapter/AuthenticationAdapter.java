@@ -5,6 +5,7 @@ import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.SignInRequest;
 import com.proyecto.listaPendientes.domain.aggregates.request.SignUpRequest;
 import com.proyecto.listaPendientes.domain.aggregates.response.AuthenticationResponse;
+import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
 import com.proyecto.listaPendientes.domain.aggregates.response.ResponseReniec;
 import com.proyecto.listaPendientes.domain.port.out.AuthenticationServiceOut;
 import com.proyecto.listaPendientes.domain.port.out.JWTServiceOut;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 
 @Service
@@ -38,22 +40,31 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
     private String tokenApi;
     @Override
     public UsuarioDTO signUpUser(SignUpRequest signUpRequest) {
-        ResponseReniec responseReniec= getExecutionReniec(signUpRequest.getNumeroDocumento());
-        usuarioRepository.save(getEntity(responseReniec,signUpRequest));
-        return  usuarioMapper.mapToDTO(getEntity(responseReniec,signUpRequest));
+        ResponseReniec responseReniec = getExecutionReniec(signUpRequest.getNumeroDocumento());
+        UsuarioEntity user = getEntity(responseReniec,signUpRequest);
+        user.setRol(rolRepository.findByNombreRol(signUpRequest.getRole()));
+        usuarioRepository.save(user);
+        return  usuarioMapper.mapToDTO(user);
     }
 
     @Override
     public UsuarioDTO signUpAdmin(SignUpRequest signUpRequest) {
-        ResponseReniec responseReniec= getExecutionReniec(signUpRequest.getNumeroDocumento());
-        usuarioRepository.save(getEntity(responseReniec,signUpRequest));
-        return  usuarioMapper.mapToDTO(getEntity(responseReniec,signUpRequest));
+        ResponseReniec responseReniec = getExecutionReniec(signUpRequest.getNumeroDocumento());
+        if(signUpRequest.getRole().isEmpty()){
+            UsuarioEntity admin = getEntity(responseReniec,signUpRequest);
+            admin.setRol(rolRepository.findByNombreRol("ADMIN"));
+            usuarioRepository.save(admin);
+            return  usuarioMapper.mapToDTO(admin);
+        }
+
+        return null;
     }
 
     @Override
     public AuthenticationResponse signIn(SignInRequest signInRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                signInRequest.getEmail(), signInRequest.getPassword()));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword()));
+
         var user = usuarioRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Email no valido"));
 
@@ -75,19 +86,12 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
         return  responseReniec;
     }
     private UsuarioEntity getEntity(ResponseReniec reniec, SignUpRequest signUpRequest){
-        RolEntity rol;
-        if(signUpRequest.getRole().isEmpty()){
-            rol =  rolRepository.findByNombreRol("ADMIN");
-        }else {
-            rol = rolRepository.findByNombreRol(signUpRequest.getRole());
-        }
         UsuarioEntity entity = new UsuarioEntity();
         entity.setNumeroDocumento(reniec.getNumeroDocumento());
         entity.setNombreUsuario(reniec.getNombres());
         entity.setApellidosUsuario(reniec.getApellidoPaterno()+" "+reniec.getApellidoMaterno());
-        entity.setPassword(signUpRequest.getPassword());
+        entity.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
         entity.setEmail(signUpRequest.getEmail());
-        entity.setRol(rol);
         entity.setEstadoUsuario(Constants.STATUS_ACTIVE);
         entity.setUserCreate(Constants.AUDIT_ADMIN);
         entity.setUserDateCreate(getTimestamp());

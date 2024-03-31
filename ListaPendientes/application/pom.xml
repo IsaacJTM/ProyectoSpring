@@ -8,7 +8,11 @@
     </parent>
     <artifactId>application</artifactId>
     <name>Archetype - application</name>
+    <version>0.0.1</version>
     <url>http://maven.apache.org</url>
+    <properties>
+        <sonar.moduleKey>pendientes:application</sonar.moduleKey>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.proyecto</groupId>

@@ -2,8 +2,6 @@ package com.proyecto.listaPendientes.domain.security;
 
 
 import com.proyecto.listaPendientes.domain.aggregates.exception.ExceptionGlobal;
-import com.proyecto.listaPendientes.domain.aggregates.response.ResponseBase;
-import com.proyecto.listaPendientes.domain.port.in.UsuarioServiceIn;
 import com.proyecto.listaPendientes.domain.port.out.JWTServiceOut;
 import com.proyecto.listaPendientes.domain.port.out.UsuarioServiceOut;
 import jakarta.servlet.FilterChain;
@@ -11,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.aop.framework.adapter.GlobalAdvisorAdapterRegistry;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -40,28 +37,28 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             final String jwt;
             final String userEmail;
 
+
             if (StringUtils.isEmpty(autHeader) || !StringUtils.startsWithIgnoreCase(autHeader, "Bearer ")) {
                 filterChain.doFilter(request, response);
                 return;
             }
+                jwt = autHeader.substring(7);
+                userEmail = jwtServiceOut.extractUserNameOut(jwt);
 
-            jwt = autHeader.substring(7);
-            userEmail = jwtServiceOut.extractUserNameOut(jwt);
+                if (Objects.nonNull(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetailsBD = usuarioServiceOut.userDetailsService().loadUserByUsername(userEmail);
+                    if (jwtServiceOut.validarTokenOut(jwt, userDetailsBD)) {
+                        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                        UsernamePasswordAuthenticationToken autToken = new UsernamePasswordAuthenticationToken(
+                                userDetailsBD, null, userDetailsBD.getAuthorities());
 
-            if (Objects.nonNull(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetailsBD = usuarioServiceOut.userDetailsService().loadUserByUsername(userEmail);
-                if (jwtServiceOut.validarTokenOut(jwt, userDetailsBD)) {
-                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                    UsernamePasswordAuthenticationToken autToken = new UsernamePasswordAuthenticationToken(
-                            userDetailsBD, null, userDetailsBD.getAuthorities());
-
-                    autToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    securityContext.setAuthentication(autToken);
-                    SecurityContextHolder.setContext(securityContext);
+                        autToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        securityContext.setAuthentication(autToken);
+                        SecurityContextHolder.setContext(securityContext);
+                    }
                 }
-            }
 
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
 
         }catch (Exception ex){
             // Captura la excepción y maneja la respuesta

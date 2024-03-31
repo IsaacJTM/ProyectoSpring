@@ -22,7 +22,7 @@ public class RolEntity {
     @Column(name ="nombre_Rol")
     private String nombreRol;
 
-    @Column(name = "usua_create", length = 45)
+    @Column(name = "user_create", length = 45)
     private String userCreate;
 
     @Column(name = "user_date_create")

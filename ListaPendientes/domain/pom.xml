@@ -10,4 +10,7 @@
     <version>0.0.1</version>
     <name>Archetype - domain</name>
     <url>http://maven.apache.org</url>
+    <properties>
+        <sonar.moduleKey>pendientes:domain</sonar.moduleKey>
+    </properties>
 </project>

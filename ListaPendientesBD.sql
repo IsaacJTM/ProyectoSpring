@@ -13,6 +13,7 @@ CREATE TABLE Usuario (
 	nombre_usuario VARCHAR (255) NOT NULL,
 	apellidos_usuario VARCHAR (255),
 	email_usuario VARCHAR (255) UNIQUE NOT NULL,
+	numero_documento VARCHAR(255) NOT NULL,
 	password VARCHAR (255) NOT NULL,
 	telefono VARCHAR (9),
 	edad INT, 
@@ -66,3 +67,8 @@ CREATE TABLE Tarea(
 	FOREIGN KEY (id_categoria_fk) REFERENCES Categoria (id_categoria) ON DELETE NO ACTION ON UPDATE NO ACTION,
 	FOREIGN KEY (id_usuario_fk) REFERENCES Usuario (id_usuario) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+
+INSERT INTO rol VALUES (1,'ADMIN',current_user,CURRENT_TIMESTAMP);
+INSERT INTO rol VALUES (2,'RESPONSABLE',current_user,CURRENT_TIMESTAMP);
+INSERT INTO rol VALUES (3,'DELEGANTE',current_user,CURRENT_TIMESTAMP);

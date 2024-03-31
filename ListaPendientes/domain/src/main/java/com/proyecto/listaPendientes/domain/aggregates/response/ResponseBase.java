@@ -14,7 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor
 public class ResponseBase {
 
-    private int Codigo;
+    private int codigo;
     private String mensaje;
     private Boolean exito;
     private Optional data;

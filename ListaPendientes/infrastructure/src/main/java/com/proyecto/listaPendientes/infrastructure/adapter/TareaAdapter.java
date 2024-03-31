@@ -2,14 +2,18 @@ package com.proyecto.listaPendientes.infrastructure.adapter;
 
 import com.proyecto.listaPendientes.domain.aggregates.constants.Constants;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
+import com.proyecto.listaPendientes.domain.aggregates.dto.UsuarioDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestCategoria;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 import com.proyecto.listaPendientes.domain.port.out.TareaServiceOut;
 import com.proyecto.listaPendientes.infrastructure.entity.CategoriaEntity;
+import com.proyecto.listaPendientes.infrastructure.entity.ComentarioEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.TareaEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.UsuarioEntity;
 import com.proyecto.listaPendientes.infrastructure.mapper.CategoriaMapper;
 import com.proyecto.listaPendientes.infrastructure.mapper.TareaMapper;
+import com.proyecto.listaPendientes.infrastructure.patAdapter.PatAdapter;
+import com.proyecto.listaPendientes.infrastructure.redis.RedisService;
 import com.proyecto.listaPendientes.infrastructure.repository.CategoriaRepository;
 import com.proyecto.listaPendientes.infrastructure.repository.ComentarioRepository;
 import com.proyecto.listaPendientes.infrastructure.repository.TareaRepository;
@@ -30,6 +34,7 @@ public class TareaAdapter implements TareaServiceOut {
     private final UsuarioRepository usuarioRepository;
     private final ComentarioRepository comentarioRepository;
     private final CategoriaRepository categoriaRepository;
+    private final RedisService redisService;
     @Override
     public TareaDTO crearTareaOut(RequestTarea requestTarea) {
         tareaRepository.save(getEntity(requestTarea));
@@ -38,7 +43,17 @@ public class TareaAdapter implements TareaServiceOut {
 
     @Override
     public Optional<TareaDTO> obtenerTareaOut(Long id) {
-        return Optional.ofNullable(tareaMapper.mapToDTO(tareaRepository.findById(id).get()));
+        String redisInfo = redisService.getFromRedis(Constants.REDIS_KEY_USUARIO + id);
+        if(redisInfo != null){
+            TareaDTO tareaDTO = PatAdapter.convertFromJson(redisInfo,TareaDTO.class);
+            return Optional.ofNullable(tareaDTO);
+        }else{
+            TareaDTO workDto = tareaMapper.mapToDTO(tareaRepository.findById(id).get());
+            String redis = PatAdapter.convertToJson(workDto);
+            redisService.saveRedis(Constants.REDIS_KEY_USUARIO+id,redis,1);
+            return Optional.ofNullable(workDto);
+        }
+
     }
 
     @Override
@@ -79,6 +94,9 @@ public class TareaAdapter implements TareaServiceOut {
 
     private TareaEntity getEntity(RequestTarea requestTarea){
         UsuarioEntity usuarioEntity = usuarioRepository.findByIdUsuario(requestTarea.getUsuario());
+        CategoriaEntity categoriaEntity = categoriaRepository.findByIdCategoria(requestTarea.getUsuario());
+        ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(requestTarea.getUsuario());
+
         TareaEntity entity = new TareaEntity();
         entity.setTitulo(requestTarea.getTitulo());
         entity.setDescripcion(requestTarea.getDescripcion());
@@ -87,6 +105,8 @@ public class TareaAdapter implements TareaServiceOut {
         entity.setUserCreate(Constants.AUDIT_ADMIN);
         entity.setUserDateCreate(getTimestamp());
         entity.setUsuario(usuarioEntity);
+        entity.setCategoria(categoriaEntity);
+        entity.setComentario(comentarioEntity);
         return entity;
     }
 

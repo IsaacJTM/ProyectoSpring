@@ -33,7 +33,7 @@ public class TareaEntity {
     @Column(name = "estado_tarea", nullable = false)
     private Integer estadoTarea;
 
-    @Column(name = "usua_create", length = 45)
+    @Column(name = "user_create", length = 45)
     private String userCreate;
 
     @Column(name = "user_date_create")

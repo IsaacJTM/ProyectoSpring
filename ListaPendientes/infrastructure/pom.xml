@@ -10,6 +10,9 @@
     <version>0.0.1</version>
     <name>Archetype - infrastructure</name>
     <url>http://maven.apache.org</url>
+    <properties>
+        <sonar.moduleKey>pendientes:infrastructure</sonar.moduleKey>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.proyecto</groupId>

@@ -3,7 +3,6 @@ package com.proyecto.listaPendientes.application.controller;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
 import com.proyecto.listaPendientes.domain.port.in.TareaServiceIn;
-import com.proyecto.listaPendientes.infrastructure.entity.TareaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +36,12 @@ public class TareaController {
         return ResponseEntity.ok(tareaServiceIn.obtenerTodasIn());
     }
 
-    @GetMapping("delegante/ActualizarTarea/{id}")
+    @PutMapping("delegante/ActualizarTarea/{id}")
     public ResponseEntity<TareaDTO> actualzarTarea(@PathVariable Long id,@RequestBody RequestTarea requestTarea){
         return ResponseEntity.ok(tareaServiceIn.actualzarTareaIn(id,requestTarea));
     }
 
-    @GetMapping("delegante/EliminarTarea/{id}")
+    @DeleteMapping("delegante/EliminarTarea/{id}")
     public ResponseEntity<TareaDTO> deleteTarea(@PathVariable Long id){
         return ResponseEntity.ok(tareaServiceIn.deleteTareaIn(id));
     }

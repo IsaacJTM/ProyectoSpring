@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "comentario")
 @RequiredArgsConstructor
+@NamedQuery(name = "ComentarioEntity.findByIdComentario", query = "select a from ComentarioEntity a where a.idComentario=:idComentario")
 public class ComentarioEntity {
 
     @Id
