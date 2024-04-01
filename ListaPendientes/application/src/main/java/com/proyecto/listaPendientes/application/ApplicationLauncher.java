@@ -10,12 +10,14 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication
+
 @ComponentScan("com.proyecto.*")
 @EntityScan("com.proyecto.*")
 @EnableFeignClients("com.proyecto.*")
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @EnableJpaRepositories("com.proyecto")
+
+@SpringBootApplication
 public class ApplicationLauncher {
 
     public static void main(String[] args){

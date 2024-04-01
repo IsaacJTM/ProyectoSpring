@@ -26,8 +26,8 @@ public class CategoriaEntity {
     @Column(name = "descripcion_categoria")
     private String descripcionCategoria;
 
-    @Column(name = "estado_parestesco", nullable = false)
-    private Integer estadoParestesco;
+    @Column(name = "estado_parentesco", nullable = false)
+    private Integer estadoParentesco;
 
     @Column(name = "user_create", length = 45)
     private String userCreate;

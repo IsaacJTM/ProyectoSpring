@@ -2,10 +2,13 @@ package com.proyecto.listaPendientes.infrastructure.adapter;
 
 import com.proyecto.listaPendientes.domain.aggregates.constants.Constants;
 import com.proyecto.listaPendientes.domain.aggregates.dto.CategoriaDTO;
+import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestCategoria;
 import com.proyecto.listaPendientes.domain.port.out.CategoriaServiceOut;
 import com.proyecto.listaPendientes.infrastructure.entity.CategoriaEntity;
 import com.proyecto.listaPendientes.infrastructure.mapper.CategoriaMapper;
+import com.proyecto.listaPendientes.infrastructure.patAdapter.PatAdapter;
+import com.proyecto.listaPendientes.infrastructure.redis.RedisService;
 import com.proyecto.listaPendientes.infrastructure.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ public class CategoriaAdapter implements CategoriaServiceOut{
 
     private final CategoriaMapper categoriaMapper;
     private final CategoriaRepository categoriaRepository;
+    private final RedisService redisService;
     @Override
     public CategoriaDTO crearCategoriaOut(RequestCategoria requestCategoria) {
         categoriaRepository.save(getEntity(requestCategoria));
@@ -29,7 +33,18 @@ public class CategoriaAdapter implements CategoriaServiceOut{
 
     @Override
     public Optional<CategoriaDTO> obtenerCategoriaOut(Long id) {
-        return Optional.ofNullable(categoriaMapper.mapToDTO(categoriaRepository.findById(id).get()));
+        String redisInfo = redisService.getFromRedis(Constants.REDIS_KEY_USUARIO + id);
+        CategoriaDTO categoriaDTO;
+        if(redisInfo != null){
+            categoriaDTO = PatAdapter.convertFromJson(redisInfo, CategoriaDTO.class);
+            return Optional.ofNullable(categoriaDTO);
+        }else{
+            categoriaDTO = categoriaMapper.mapToDTO(categoriaRepository.findById(id).get());
+            String redis = PatAdapter.convertToJson(categoriaDTO);
+            redisService.saveRedis(Constants.REDIS_KEY_USUARIO+id,redis,1);
+            return Optional.ofNullable(categoriaDTO);
+        }
+
     }
 
     @Override
@@ -59,7 +74,7 @@ public class CategoriaAdapter implements CategoriaServiceOut{
         boolean existe = categoriaRepository.existsById(id);
         if(existe){
             Optional<CategoriaEntity> entity = categoriaRepository.findById(id);
-            entity.get().setEstadoParestesco(0);
+            entity.get().setEstadoParentesco(0);
             entity.get().setUserDelete(Constants.AUDIT_ADMIN);
             entity.get().setUserDateDelet(getTimestamp());
             categoriaRepository.save(entity.get());
@@ -73,7 +88,7 @@ public class CategoriaAdapter implements CategoriaServiceOut{
         CategoriaEntity entity = new CategoriaEntity();
         entity.setNombreCategoria(requestCategoria.getNombreCategoria());
         entity.setDescripcionCategoria(requestCategoria.getDescripcion());
-        entity.setEstadoParestesco(Constants.STATUS_ACTIVE);
+        entity.setEstadoParentesco(Constants.STATUS_ACTIVE);
         entity.setUserCreate(Constants.AUDIT_ADMIN);
         entity.setUserDateCreate(getTimestamp());
         return entity;

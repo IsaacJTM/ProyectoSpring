@@ -15,32 +15,16 @@ import java.util.Optional;
 @Component
 public class PatAdapter {
 
-   public static String convertToJson(UsuarioDTO usuarioDTO){
+   public static <T> String convertToJson(T dto){
         try{
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(usuarioDTO);
+            return objectMapper.writeValueAsString(dto);
         }catch(JsonProcessingException e){
             throw new RuntimeException(e);
         }
     }
 
-    public static String convertToJson(TareaDTO tareaDTO){
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(tareaDTO);
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
-        }
-    }
 
-    /*public static String convertToJson(Optional claseDto){
-        try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writeValueAsString(claseDto);
-        }catch(JsonProcessingException e){
-            throw new RuntimeException(e);
-        }
-    }*/
     public static <T> T convertFromJson(String json, Class<T> valueType){
         try{
             ObjectMapper objectMapper = new ObjectMapper();

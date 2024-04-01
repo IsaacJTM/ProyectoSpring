@@ -50,14 +50,10 @@ public class AuthenticationAdapter implements AuthenticationServiceOut {
     @Override
     public UsuarioDTO signUpAdmin(SignUpRequest signUpRequest) {
         ResponseReniec responseReniec = getExecutionReniec(signUpRequest.getNumeroDocumento());
-        if(signUpRequest.getRole().isEmpty()){
             UsuarioEntity admin = getEntity(responseReniec,signUpRequest);
             admin.setRol(rolRepository.findByNombreRol("ADMIN"));
             usuarioRepository.save(admin);
             return  usuarioMapper.mapToDTO(admin);
-        }
-
-        return null;
     }
 
     @Override

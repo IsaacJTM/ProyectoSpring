@@ -34,6 +34,13 @@ public class UsuarioController {
                 .body(usuarioServiceIn.getUsuarioIn(id).get());
     }
 
+    @GetMapping("admin/ObtenerUser/{id}")
+    public ResponseEntity<UsuarioDTO> getUsuarioAdmin(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(usuarioServiceIn.getUsuarioIn(id).get());
+    }
+
     @PutMapping("Users/responsable/ActualizarUser/{id}")
     public ResponseEntity<UsuarioDTO> updateUsuarioRespnsable(@PathVariable Long id, @RequestBody RequestUsuario requestUsuario) {
         return ResponseEntity.ok(usuarioServiceIn.updateUsuarioIn(id, requestUsuario));
@@ -54,7 +61,7 @@ public class UsuarioController {
 
     }
 
-    @GetMapping("admin/ObtenerUser")
+    @GetMapping("admin/ObtenerUsers")
     public ResponseEntity<List<UsuarioDTO>> listaUsuarios() {
         return ResponseEntity
                 .status(HttpStatus.OK)

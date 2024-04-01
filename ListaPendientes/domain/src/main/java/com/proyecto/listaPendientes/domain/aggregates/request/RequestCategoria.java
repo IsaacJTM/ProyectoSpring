@@ -8,5 +8,4 @@ import lombok.Setter;
 public class RequestCategoria {
     private String nombreCategoria;
     private String descripcion;
-    private int estado;
 }
