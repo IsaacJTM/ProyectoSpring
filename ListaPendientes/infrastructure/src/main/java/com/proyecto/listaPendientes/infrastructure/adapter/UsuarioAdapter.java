@@ -85,7 +85,9 @@ public class UsuarioAdapter implements UsuarioServiceOut {
         usuarioActualizar.setApellidosUsuario(requestUsuario.getApellidosUsuario());
         usuarioActualizar.setTelefono(requestUsuario.getTelefono());
         usuarioActualizar.setEdad(requestUsuario.getEdad());
-        usuarioActualizar.setPassword(new BCryptPasswordEncoder().encode(usuarioActualizar.getPassword()));
+        if (requestUsuario.getPassword() != null) {
+            usuarioActualizar.setPassword(new BCryptPasswordEncoder().encode(requestUsuario.getPassword()));
+        }
         usuarioActualizar.setUserUpdate(Constants.AUDIT_ADMIN);
         usuarioActualizar.setUserDateUpdate(getTimestamp());
         return usuarioActualizar;

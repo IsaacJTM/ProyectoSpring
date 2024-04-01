@@ -1,6 +1,7 @@
 package com.proyecto.listaPendientes.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -47,4 +48,6 @@ public class CategoriaEntity {
     @Column(name = "user_date_delet")
     private Timestamp userDateDelet;
 
+    public CategoriaEntity(long l, String s) {
+    }
 }

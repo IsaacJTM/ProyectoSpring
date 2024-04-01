@@ -20,5 +20,6 @@ public class CategoriaDTO {
     private String userUpdate;
     private Timestamp userDateUpdate;
     private String userDelete;
+    private Timestamp userDateDelete;
 
 }
