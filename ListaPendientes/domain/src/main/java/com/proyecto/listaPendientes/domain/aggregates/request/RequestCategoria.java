@@ -1,8 +1,7 @@
 package com.proyecto.listaPendientes.domain.aggregates.request;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter

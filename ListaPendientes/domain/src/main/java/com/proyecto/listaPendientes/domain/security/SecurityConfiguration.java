@@ -2,6 +2,7 @@ package com.proyecto.listaPendientes.domain.security;
 
 import com.proyecto.listaPendientes.domain.port.in.UsuarioServiceIn;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,11 +25,13 @@ public class SecurityConfiguration {
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final UsuarioServiceIn usuarioServiceIn;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/autenticacion/**")
                         .permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN")
                         .requestMatchers("/api/v1/Users/responsable/**").hasAnyAuthority("RESPONSABLE")
                         .requestMatchers("/api/v1/Users/delegante/**").hasAnyAuthority("DELEGANTE")
@@ -40,6 +43,12 @@ public class SecurityConfiguration {
                return  httpSecurity.build();
     }
 
+    private static final String[] AUTH_WHITELIST={
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/listaPendientes/swagger-ui.html",
+            "/listaPendientes/swagger-ui/**",
+    };
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

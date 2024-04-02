@@ -1,6 +1,6 @@
 package com.proyecto.listaPendientes.domain.aggregates.request;
 
-import jakarta.persistence.Column;
+
 import lombok.Getter;
 import lombok.Setter;
 
