@@ -53,6 +53,14 @@ public class UsuarioController {
                 .body(usuarioServiceIn.updateUsuarioIn(id, requestUsuario));
 
     }
+
+    @PutMapping("admin/ActualizarUser/{id}")
+    public ResponseEntity<UsuarioDTO> updateUsuarioAdmin(@PathVariable Long id, @RequestBody RequestUsuario requestUsuario) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioServiceIn.updateUsuarioIn(id, requestUsuario));
+
+    }
     @DeleteMapping("admin/EliminarUsuario/{id}")
     public ResponseEntity<UsuarioDTO> deleteUsuario(@PathVariable Long id) {
         return ResponseEntity
