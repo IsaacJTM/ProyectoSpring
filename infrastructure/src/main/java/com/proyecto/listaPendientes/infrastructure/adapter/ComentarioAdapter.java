@@ -20,7 +20,6 @@ public class ComentarioAdapter implements ComentarioServiceOut {
     private final ComentarioRepository comentarioRepository;
 
 
-
     @Override
     public ComentarioDTO crearComentarioOut(RequestComentario requestComentario) throws JsonProcessingException {
         try {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.proyecto.listaPendientes.domain.aggregates.constants.Constants;
 import com.proyecto.listaPendientes.domain.aggregates.dto.TareaDTO;
 import com.proyecto.listaPendientes.domain.aggregates.request.RequestTarea;
+import com.proyecto.listaPendientes.domain.port.in.UsuarioServiceIn;
 import com.proyecto.listaPendientes.domain.port.out.TareaServiceOut;
 import com.proyecto.listaPendientes.infrastructure.entity.CategoriaEntity;
 import com.proyecto.listaPendientes.infrastructure.entity.ComentarioEntity;
@@ -16,7 +17,10 @@ import com.proyecto.listaPendientes.infrastructure.repository.CategoriaRepositor
 import com.proyecto.listaPendientes.infrastructure.repository.ComentarioRepository;
 import com.proyecto.listaPendientes.infrastructure.repository.TareaRepository;
 import com.proyecto.listaPendientes.infrastructure.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -28,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Component
 @AllArgsConstructor
 public class TareaAdapter implements TareaServiceOut {
     private final TareaMapper tareaMapper;
@@ -36,6 +41,8 @@ public class TareaAdapter implements TareaServiceOut {
     private final ComentarioRepository comentarioRepository;
     private final CategoriaRepository categoriaRepository;
     private final RedisService redisService;
+    private final UsuarioServiceIn usuarioServiceIn;
+
 
 
     @Override
@@ -109,7 +116,6 @@ public class TareaAdapter implements TareaServiceOut {
         }
         CategoriaEntity categoriaEntity = categoriaRepository.findByIdCategoria(requestTarea.getCategoria());
         ComentarioEntity comentarioEntity = comentarioRepository.findByIdComentario(String.valueOf(requestTarea.getComentario()));
-
 
         TareaEntity entity = new TareaEntity();
         entity.setTitulo(requestTarea.getTitulo());

@@ -51,12 +51,6 @@ public class JWTServiceAdapter implements JWTServiceOut {
     }
 
     private Claims extractAllClaims(String token) throws ExpiredJwtException{
-       /* try{
-            Key llave = getSignKey();
-            return Jwts.parserBuilder().setSigningKey(llave).build().parseClaimsJws(token).getBody();
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "El token ha expirado");
-        }*/
         Key llave = getSignKey();
         return Jwts.parserBuilder().setSigningKey(llave).build().parseClaimsJws(token).getBody();
     }
